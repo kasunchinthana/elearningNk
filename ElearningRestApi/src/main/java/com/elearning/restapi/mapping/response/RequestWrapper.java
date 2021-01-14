@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class RequestWrapper<T> {
 
-	Payload<T> payload;
+	T payload;
 }

@@ -2,6 +2,7 @@ package com.elearning.restapi.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,25 +43,28 @@ public class AssignmentServiceImpl implements AssignmentService {
 		for (Assignment assignment : assignmentList) {
 			AssignmentDto assignmentDto =assignmentDetailsTransformer.transform(assignment);
 			assignmentDtoList.add(assignmentDto);
-		}
-		
-		res.setData(assignmentDtoList);
-		
+		}		
+		res.setData(assignmentDtoList);	
 		return res;
 		}catch(Exception ex) {
 			throw ex;
 		}
 	}
 
-	
 
 	@Override
-	public ResponsePack<AssignmentDto> createAssignment(RequestWrapper<Payload<AssignmentDto>> assignmentDto) {
+	public ResponsePack<AssignmentDto> createAssignment(RequestWrapper<AssignmentDto> assignment) {
 		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
 		Status status = new Status();
-		//Assignment assignment = assignmentDetailsTransformer.transformToDao(assignmentDto.getPayload());
-		Assignment assignment = new Assignment();
-		Assignment savedAssignment = assignmentRepository.save(assignment);
+		Assignment savedAssignment = null;
+		if (assignment.getPayload() != null){
+			Assignment assignmentDb = assignmentDetailsTransformer.transformToDao(assignment.getPayload());	
+			savedAssignment = assignmentRepository.save(assignmentDb);
+		} else {
+			status.setCode(Constants.NOTFOUND);
+			res.setStatus(status);
+		}
+		
 		if (savedAssignment.getAssingnmentId() != null) {
 			status.setCode(Constants.CREATED);
 			res.setStatus(status);
@@ -71,9 +75,70 @@ public class AssignmentServiceImpl implements AssignmentService {
 			return res;
 		}
 		//AssignmentDto responseAssignmentDto =assignmentDetailsTransformer.transform(savedAssignment);
-		
-		
+			
 	}
-	
+
+
+	@Override
+	public ResponsePack<AssignmentDto> getAssignmentsById(Integer id) throws Exception {
+		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
+		try {
+		Assignment assignmentFromDB= null;
+		Optional<Assignment> assignment = assignmentRepository.findById(id);
+		if (assignment.isPresent()) {
+			 assignmentFromDB = assignment.get();
+		} else {
+			 assignmentFromDB = null;
+		}				
+		AssignmentDto assignmentDto =assignmentDetailsTransformer.transform(assignmentFromDB);
+		List<AssignmentDto> dtoList = new ArrayList<AssignmentDto>();
+		dtoList.add(assignmentDto);
+		res.setData(dtoList);
+		
+		return res;
+		}catch(Exception ex) {
+			throw ex;
+		}
+	}
+
+
+	@Override
+	public ResponsePack<AssignmentDto> deleteAssignmentById(Integer id) throws Exception {
+		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
+		Status status = new Status();
+		try {			
+			assignmentRepository.deleteById(id);
+			status.setCode(200);
+			status.setMessage("OK");
+			res.setStatus(status);
+		}catch(Exception ex){
+			throw ex;
+		}
+		return res;
+	}
+
+
+	@Override
+	public ResponsePack<AssignmentDto> updateAssignment(Integer id,
+			RequestWrapper<Payload<AssignmentDto>> assignmentDto) {
+		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
+		try {
+			Assignment assignmentFromDB= null;
+			Optional<Assignment> assignment = assignmentRepository.findById(id);
+			if (assignment.isPresent()) {
+				 assignmentFromDB = assignment.get();
+				 // get payload assignment obj here
+				//Assignment assignmentfromFront = assignmentDetailsTransformer.transformToDao(assignmentDto.getPayload()); 
+				 
+			} else {
+				 assignmentFromDB = null;
+			}
+			
+			
+		}catch(Exception e) {
+			
+		}
+		return res;
+	}	
 	
 }

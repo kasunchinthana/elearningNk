@@ -11,5 +11,13 @@ public interface AssignmentService {
   
   ResponsePack<AssignmentDto> getAllAssignment() throws Exception; 
 
-  ResponsePack<AssignmentDto> createAssignment(RequestWrapper<Payload<AssignmentDto>> assignmentDto);
+  ResponsePack<AssignmentDto> createAssignment(RequestWrapper<AssignmentDto> payload);
+
+  ResponsePack<AssignmentDto> getAssignmentsById(Integer id) throws Exception;
+
+  ResponsePack<AssignmentDto> deleteAssignmentById(Integer id) throws Exception;
+
+  ResponsePack<AssignmentDto> updateAssignment(Integer id, RequestWrapper<Payload<AssignmentDto>> assignmentDto);
+  
+  
 }

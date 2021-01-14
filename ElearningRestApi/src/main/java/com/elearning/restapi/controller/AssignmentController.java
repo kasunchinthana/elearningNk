@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,11 +30,10 @@ import com.elearning.restapi.utils.Constants;
 @RequestMapping("/elearning-service/v1")
 @CrossOrigin
 public class AssignmentController {
-	
+
 	@Autowired
 	private AssignmentService assignmentService;
-	
-		
+
 	/*
 	 * @GetMapping("/assignments") public ResponsePack<AssignmentDto>
 	 * getAllAssignments() { ResponsePack<AssignmentDto> assignmentDtoLlist = new
@@ -42,52 +44,79 @@ public class AssignmentController {
 	 * 
 	 * return assignmentDtoLlist; }
 	 */
-	
-	@GetMapping("/assignments2") 
-	public  ResponseEntity<ResponsePack<AssignmentDto>> getAllAssignments2() {
+
+	@GetMapping("/assignments")
+	public ResponseEntity<ResponsePack<AssignmentDto>> getAllAssignments() {
 		ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
 		try {
-		assignmentDtoLlist=assignmentService.getAllAssignment();
-		Status responseStatus = new Status();
-		if(assignmentDtoLlist.getData().size()!=0) {
-			responseStatus.setCode(Constants.SUCCESS);
-			responseStatus.setMessage("ok");
-			assignmentDtoLlist.setStatus(responseStatus);
-			 return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.NO_CONTENT);
-		}else {
-			responseStatus.setCode(Constants.NOTFOUND);
-			responseStatus.setMessage("ok");
-			assignmentDtoLlist.setStatus(responseStatus);
-			return new ResponseEntity<ResponsePack<AssignmentDto>>(assignmentDtoLlist, HttpStatus.OK);
+			assignmentDtoLlist = assignmentService.getAllAssignment();
+			Status responseStatus = new Status();
+			if (assignmentDtoLlist.getData().size() != 0) {
+				responseStatus.setCode(Constants.SUCCESS);
+				responseStatus.setMessage("ok");
+				assignmentDtoLlist.setStatus(responseStatus);
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(assignmentDtoLlist, HttpStatus.ACCEPTED);
+			} else {
+				responseStatus.setCode(Constants.NOTFOUND);
+				responseStatus.setMessage("ok");
+				assignmentDtoLlist.setStatus(responseStatus);
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(assignmentDtoLlist, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		}catch (Exception e) {
-			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		//return assignmentDtoLlist;
-	}
-	
-	
-	@PostMapping("/assignments")
-	public ResponsePack<AssignmentDto> createAssignments(@RequestBody RequestWrapper<Payload<AssignmentDto>> assignmentDto){
-		ResponsePack<AssignmentDto> responseAssignmentDto=assignmentService.createAssignment(assignmentDto);
-		return responseAssignmentDto;
-		
+		// return assignmentDtoLlist;
 	}
 
-	/*
-	 * ResponseEntity<TBXResponseWrapper<GeneralSupplier>>
-	 * ResponseEntity<List<Supplier>>
-	 * 
-	 * 
-	 * 
-	 * public ResponseEntity<TBXResponseWrapper<Resource<Client>>>
-	 * addClient( @RequestBody TBXRequestWrapper<Client> client
-	 * , @RequestParam(required = false) boolean isUpdate) { try { log.debug(
-	 * "request to save clients : ", client ); if( isUpdate == false &&
-	 * client.getPayload().getId() != 0 ) { TBXResponse response = new TBXResponse(
-	 * new BadRequestAlertException( "A new groupMaster cannot already have an ID",
-	 * ENTITY_NAME, "idexis } }
-	 */
-	  
+	@PostMapping("/assignments")
+	public ResponsePack<AssignmentDto> createAssignments(
+			@RequestBody RequestWrapper<AssignmentDto> payload) {
+		ResponsePack<AssignmentDto> responseAssignmentDto = assignmentService.createAssignment(payload);
+		return responseAssignmentDto;
+	}
+
+	@GetMapping("/assignments/{id}")
+	public ResponseEntity<ResponsePack<AssignmentDto>> getAssignmentsById(@PathVariable("id") Integer id) {
+		ResponsePack<AssignmentDto> assignmentDto = new ResponsePack<>();
+		// ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
+		try {
+			assignmentDto = assignmentService.getAssignmentsById(id);
+			if (assignmentDto != null) {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(assignmentDto, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@DeleteMapping("/assignments/{id}")
+	public ResponseEntity<ResponsePack<AssignmentDto>> deleteAssignmentById(@PathVariable("id") Integer id) {
+		ResponsePack<AssignmentDto> assignmentDto = new ResponsePack<>();
+		try {
+			assignmentDto = assignmentService.deleteAssignmentById(id);
+			if (assignmentDto != null) {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(assignmentDto, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@PutMapping("/assignments/{id}")
+	public ResponsePack<AssignmentDto> updateAssignment(@PathVariable("id") Integer id,
+			@RequestBody RequestWrapper<Payload<AssignmentDto>> assignmentDto) {
+		
+		ResponsePack<AssignmentDto> updatetAssignment = assignmentService.updateAssignment(id,assignmentDto);
+		return null;
+
+	}
 }

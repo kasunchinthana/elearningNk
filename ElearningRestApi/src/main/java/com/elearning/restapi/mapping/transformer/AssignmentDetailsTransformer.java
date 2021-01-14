@@ -11,13 +11,18 @@ public class AssignmentDetailsTransformer {
 	
 	public AssignmentDto transform(Assignment assignment) {
 		
-		AssignmentDto assignmentDto = new AssignmentDto();
-		AssignmentSummaryDto assignmentSummaryDto = new AssignmentSummaryDto();
-		assignmentSummaryDto.setAssingnmentId(assignment.getAssingnmentId());
-		assignmentSummaryDto.setName(assignment.getName());
-		assignmentSummaryDto.setCutoffMarks(assignment.getCutoffMarks());
-		assignmentDto.setSummary(assignmentSummaryDto);
-		return assignmentDto;
+		if(assignment != null) {
+			AssignmentDto assignmentDto = new AssignmentDto();
+			AssignmentSummaryDto assignmentSummaryDto = new AssignmentSummaryDto();
+			assignmentSummaryDto.setAssingnmentId(assignment.getAssingnmentId());
+			assignmentSummaryDto.setName(assignment.getName());
+			assignmentSummaryDto.setCutoffMarks(assignment.getCutoffMarks());
+			assignmentDto.setSummary(assignmentSummaryDto);
+			return assignmentDto;
+		} else {
+			return null;
+		}
+		
 		
 	}
 

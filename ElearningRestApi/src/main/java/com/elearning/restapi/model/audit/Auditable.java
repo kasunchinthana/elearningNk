@@ -24,10 +24,10 @@ public abstract class Auditable {
 	
 	@CreatedDate
 	@Column(nullable = false,updatable = false)
-	private LocalDateTime created_at;
+	private LocalDateTime created_at=  LocalDateTime.now();
 	
 	@LastModifiedDate
 	@Column(nullable = false)
-	private LocalDateTime updated_at;
+	private LocalDateTime updated_at = LocalDateTime.now();
 
 }
