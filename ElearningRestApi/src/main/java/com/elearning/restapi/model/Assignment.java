@@ -46,6 +46,7 @@ public class Assignment extends Auditable implements Serializable{
 	@OneToMany(mappedBy = "assignment")
     List<StudentAssignment> studentAssignment;
 		
-	 
+	@OneToMany(mappedBy="assignment")
+    private List<Question> question;
 	 
 }

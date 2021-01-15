@@ -26,7 +26,7 @@ public class Student extends Auditable implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "student_id")
-	private int studentId;
+	private Integer studentId;
 	private String firstName;
 	private String lastName;
 	

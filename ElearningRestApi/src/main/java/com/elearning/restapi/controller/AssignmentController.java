@@ -45,7 +45,6 @@ public class AssignmentController {
 	 * return assignmentDtoLlist; }
 	 */
 
-	
 	@GetMapping("/assignments")
 	public ResponseEntity<ResponsePack<AssignmentDto>> getAllAssignments() {
 		ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
@@ -71,10 +70,20 @@ public class AssignmentController {
 	}
 
 	@PostMapping("/assignments")
-	public ResponsePack<AssignmentDto> createAssignments(
+	public ResponseEntity<ResponsePack<AssignmentDto>> createAssignments(
 			@RequestBody RequestWrapper<AssignmentDto> payload) {
-		ResponsePack<AssignmentDto> responseAssignmentDto = assignmentService.createAssignment(payload);
-		return responseAssignmentDto;
+		ResponsePack<AssignmentDto> responseAssignmentDto = null;
+		try {
+			responseAssignmentDto = assignmentService.createAssignment(payload);
+			if (responseAssignmentDto != null) {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(responseAssignmentDto, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@GetMapping("/assignments/{id}")
@@ -113,11 +122,20 @@ public class AssignmentController {
 	}
 
 	@PutMapping("/assignments/{id}")
-	public ResponsePack<AssignmentDto> updateAssignment(@PathVariable("id") Integer id,
-			@RequestBody RequestWrapper<Payload<AssignmentDto>> assignmentDto) {
-		
-		ResponsePack<AssignmentDto> updatetAssignment = assignmentService.updateAssignment(id,assignmentDto);
-		return null;
+	public ResponseEntity<ResponsePack<AssignmentDto>> updateAssignment(@PathVariable("id") Integer id,
+			@RequestBody RequestWrapper<AssignmentDto> payload) {
+		ResponsePack<AssignmentDto> updatetAssignment = null;
+		try {
+			updatetAssignment = assignmentService.updateAssignment(id, payload);
+			if (updatetAssignment != null) {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(updatetAssignment, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<ResponsePack<AssignmentDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 }

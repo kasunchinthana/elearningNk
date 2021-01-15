@@ -16,7 +16,13 @@ public class AssignmentDetailsTransformer {
 			AssignmentSummaryDto assignmentSummaryDto = new AssignmentSummaryDto();
 			assignmentSummaryDto.setAssingnmentId(assignment.getAssingnmentId());
 			assignmentSummaryDto.setName(assignment.getName());
-			assignmentSummaryDto.setCutoffMarks(assignment.getCutoffMarks());
+			assignmentSummaryDto.setCutoffMarks(assignment.getCutoffMarks());			
+			assignmentSummaryDto.setDescription(assignment.getDescription());
+			assignmentSummaryDto.setDevDate(assignment.getDevDate());
+			assignmentSummaryDto.setDuration(assignment.getDuration());
+			assignmentSummaryDto.setStatus(assignment.getStatus());
+			assignmentSummaryDto.setTotalMarks(assignment.getTotalMarks());
+			
 			assignmentDto.setSummary(assignmentSummaryDto);
 			return assignmentDto;
 		} else {

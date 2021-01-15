@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.elearning.restapi.model.audit.Auditable;
 
@@ -22,4 +24,8 @@ public class Question extends Auditable implements Serializable {
 	private String type;
 	private String correctAnswer;
 	private String hint;
+	
+	@ManyToOne
+    @JoinColumn(name="assingnment_id", nullable=false)
+    private Assignment assignment;
 }

@@ -53,26 +53,30 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 
 	@Override
-	public ResponsePack<AssignmentDto> createAssignment(RequestWrapper<AssignmentDto> assignment) {
+	public ResponsePack<AssignmentDto> createAssignment(RequestWrapper<AssignmentDto> assignment)  throws Exception{
 		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
 		Status status = new Status();
 		Assignment savedAssignment = null;
-		if (assignment.getPayload() != null){
-			Assignment assignmentDb = assignmentDetailsTransformer.transformToDao(assignment.getPayload());	
-			savedAssignment = assignmentRepository.save(assignmentDb);
-		} else {
-			status.setCode(Constants.NOTFOUND);
-			res.setStatus(status);
-		}
-		
-		if (savedAssignment.getAssingnmentId() != null) {
-			status.setCode(Constants.CREATED);
-			res.setStatus(status);
-			return res;
-		}else {
-			status.setCode(Constants.ERROR);
-			res.setStatus(status);
-			return res;
+		try {
+			if (assignment.getPayload() != null){
+				Assignment assignmentDb = assignmentDetailsTransformer.transformToDao(assignment.getPayload());	
+				savedAssignment = assignmentRepository.save(assignmentDb);
+			} else {
+				status.setCode(Constants.NOTFOUND);
+				res.setStatus(status);
+			}
+			
+			if (savedAssignment.getAssingnmentId() != null) {
+				status.setCode(Constants.CREATED);
+				res.setStatus(status);
+				return res;
+			}else {
+				status.setCode(Constants.ERROR);
+				res.setStatus(status);
+				return res;
+			}
+		}catch(Exception ex) {
+			throw ex;
 		}
 		//AssignmentDto responseAssignmentDto =assignmentDetailsTransformer.transform(savedAssignment);
 			
@@ -83,19 +87,19 @@ public class AssignmentServiceImpl implements AssignmentService {
 	public ResponsePack<AssignmentDto> getAssignmentsById(Integer id) throws Exception {
 		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
 		try {
-		Assignment assignmentFromDB= null;
-		Optional<Assignment> assignment = assignmentRepository.findById(id);
-		if (assignment.isPresent()) {
-			 assignmentFromDB = assignment.get();
-		} else {
-			 assignmentFromDB = null;
-		}				
-		AssignmentDto assignmentDto =assignmentDetailsTransformer.transform(assignmentFromDB);
-		List<AssignmentDto> dtoList = new ArrayList<AssignmentDto>();
-		dtoList.add(assignmentDto);
-		res.setData(dtoList);
-		
-		return res;
+			Assignment assignmentFromDB= null;
+			Optional<Assignment> assignment = assignmentRepository.findById(id);
+			if (assignment.isPresent()) {
+				 assignmentFromDB = assignment.get();
+			} else {
+				 assignmentFromDB = null;
+			}				
+			AssignmentDto assignmentDto =assignmentDetailsTransformer.transform(assignmentFromDB);
+			List<AssignmentDto> dtoList = new ArrayList<AssignmentDto>();
+			dtoList.add(assignmentDto);
+			res.setData(dtoList);
+			
+			return res;
 		}catch(Exception ex) {
 			throw ex;
 		}
@@ -120,23 +124,51 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	@Override
 	public ResponsePack<AssignmentDto> updateAssignment(Integer id,
-			RequestWrapper<Payload<AssignmentDto>> assignmentDto) {
+			RequestWrapper<AssignmentDto> assignmentDto)  throws Exception {
 		ResponsePack<AssignmentDto> res = new ResponsePack<AssignmentDto>();
+		Status status = new Status();
+		Assignment savedAssignment = null;
 		try {
 			Assignment assignmentFromDB= null;
 			Optional<Assignment> assignment = assignmentRepository.findById(id);
 			if (assignment.isPresent()) {
 				 assignmentFromDB = assignment.get();
 				 // get payload assignment obj here
-				//Assignment assignmentfromFront = assignmentDetailsTransformer.transformToDao(assignmentDto.getPayload()); 
-				 
+				Assignment assignmentfromFront = assignmentDetailsTransformer.transformToDao(assignmentDto.getPayload()); 
+				
+				if(assignmentfromFront.getCutoffMarks()!= null ) {
+					assignmentFromDB.setCutoffMarks(assignmentfromFront.getCutoffMarks());
+				}
+				if(assignmentfromFront.getDescription()!= null ) {
+					assignmentFromDB.setDescription(assignmentfromFront.getDescription());
+				}
+				if(assignmentfromFront.getDevDate()!= null ) {
+					assignmentFromDB.setDevDate(assignmentfromFront.getDevDate());
+				}
+				if(assignmentfromFront.getDuration()!= null ) {
+					assignmentFromDB.setDuration(assignmentfromFront.getDuration());
+				}
+				if(assignmentfromFront.getName()!= null ) {
+					assignmentFromDB.setName(assignmentfromFront.getName());
+				}
+				if(assignmentfromFront.getStatus()!= null ) {
+					assignmentFromDB.setStatus(assignmentfromFront.getStatus());
+				}
+				if(assignmentfromFront.getTotalMarks()!= null ) {
+					assignmentFromDB.setTotalMarks(assignmentfromFront.getTotalMarks());
+				}
+				savedAssignment = assignmentRepository.save(assignmentFromDB);
+				status.setCode(Constants.CREATED);
+				res.setStatus(status);
+				return res;
 			} else {
-				 assignmentFromDB = null;
+				status.setCode(Constants.NOTFOUND);
+				res.setStatus(status);
 			}
 			
 			
-		}catch(Exception e) {
-			
+		}catch(Exception ex) {
+			throw ex;
 		}
 		return res;
 	}	
