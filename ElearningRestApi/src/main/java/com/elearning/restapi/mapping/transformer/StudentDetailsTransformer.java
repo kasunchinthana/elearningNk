@@ -16,6 +16,8 @@ public class StudentDetailsTransformer {
 		StudentSummaryDto studentSummaryDto = new StudentSummaryDto();
 		studentSummaryDto.setStudentId(student.getStudentId());
 		studentSummaryDto.setFirstName(student.getFirstName());
+		studentSummaryDto.setLastName(student.getLastName());
+		studentSummaryDto.setGrade(student.getGrade().getGradeId());
 		studentDto.setSummary(studentSummaryDto);
 		return studentDto;
 		

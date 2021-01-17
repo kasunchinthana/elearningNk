@@ -2,6 +2,7 @@ package com.elearning.restapi.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.elearning.restapi.model.audit.Auditable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,4 +44,10 @@ public class Teacher extends Auditable implements Serializable {
 	public Teacher() {
 
 	}
+	
+	@OneToMany(mappedBy = "teacher")
+    List<TeacherAssignmentReview> teacherAssignmentReview;
+	
+	@OneToMany(mappedBy = "teacher")
+    List<TeacherAssignment> teacherAssignment;
 }

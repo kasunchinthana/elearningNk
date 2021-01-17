@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.elearning.restapi.mapping.response.AssignmentDto;
 import com.elearning.restapi.mapping.response.AssignmentSummaryDto;
 import com.elearning.restapi.model.Assignment;
+import com.elearning.restapi.model.Subject;
 
 @Service
 public class AssignmentDetailsTransformer {
@@ -44,7 +45,12 @@ public class AssignmentDetailsTransformer {
 		assignment.setName(assignmentDto.getSummary().getName());
 		assignment.setStatus(assignmentDto.getSummary().getStatus());
 		assignment.setTotalMarks(assignmentDto.getSummary().getTotalMarks());
+		Subject subject = new Subject();
 		
+		
+		subject.setSubjectCode(assignmentDto.getSummary().getSubjectCode());
+		subject.setSubjectName(assignmentDto.getSummary().getSubjectName());
+		assignment.setSubject(subject);
 		return assignment;
 		
 	}

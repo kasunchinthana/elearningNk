@@ -48,6 +48,11 @@ public class Student extends Auditable implements Serializable {
 		this.grade = grade;
 	}
 	
-
+	//one student have many StudentAssignmentAnswer
+	@OneToMany(mappedBy = "student")
+    List<StudentAssignmentAnswer> studentAssignmentAnswer;
+	
+	@OneToMany(mappedBy = "student")
+    List<TeacherAssignmentReview> teacherAssignmentReview;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.elearning.restapi.dao.AssignmentRepository;
 import com.elearning.restapi.dao.StudentRepository;
+import com.elearning.restapi.dao.SubjectRepository;
 import com.elearning.restapi.mapping.response.AssignmentDto;
 import com.elearning.restapi.mapping.response.Payload;
 import com.elearning.restapi.mapping.response.RequestWrapper;
@@ -19,6 +20,7 @@ import com.elearning.restapi.mapping.transformer.AssignmentDetailsTransformer;
 import com.elearning.restapi.mapping.transformer.StudentDetailsTransformer;
 import com.elearning.restapi.model.Assignment;
 import com.elearning.restapi.model.Student;
+import com.elearning.restapi.model.Subject;
 import com.elearning.restapi.service.AssignmentService;
 import com.elearning.restapi.service.StudentService;
 import com.elearning.restapi.utils.Constants;
@@ -31,6 +33,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 	
 	@Autowired
 	private AssignmentDetailsTransformer assignmentDetailsTransformer;
+	
+	@Autowired
+	private SubjectRepository subjectRepository;
 	
 	
 	@Override
@@ -60,6 +65,23 @@ public class AssignmentServiceImpl implements AssignmentService {
 		try {
 			if (assignment.getPayload() != null){
 				Assignment assignmentDb = assignmentDetailsTransformer.transformToDao(assignment.getPayload());	
+				if(assignmentDb.getSubject().getSubjectCode() != null) {
+					//assignmentFromDB.getSubject().setId(id);
+					List<Subject> subjectList = subjectRepository.findBySubjectCode(assignmentDb.getSubject().getSubjectCode());
+					if(subjectList.size()>0) {
+						Subject subject = subjectList.get(0);				
+						assignmentDb.getSubject().setSubjectId(subject.getSubjectId());
+						assignmentDb.getSubject().setSubjectCode(assignmentDb.getSubject().getSubjectCode());
+						assignmentDb.getSubject().setSubjectName(assignmentDb.getSubject().getSubjectName());
+					} else {
+						status.setCode(Constants.NOTFOUND);
+						res.setStatus(status);
+					}
+					
+				} else {
+					status.setCode(Constants.NOTFOUND);
+					res.setStatus(status);
+				}
 				savedAssignment = assignmentRepository.save(assignmentDb);
 			} else {
 				status.setCode(Constants.NOTFOUND);
@@ -157,16 +179,37 @@ public class AssignmentServiceImpl implements AssignmentService {
 				if(assignmentfromFront.getTotalMarks()!= null ) {
 					assignmentFromDB.setTotalMarks(assignmentfromFront.getTotalMarks());
 				}
-				savedAssignment = assignmentRepository.save(assignmentFromDB);
-				status.setCode(Constants.CREATED);
-				res.setStatus(status);
-				return res;
+				if(assignmentfromFront.getSubject().getSubjectCode() != null) {
+					//assignmentFromDB.getSubject().setId(id);
+					List<Subject> subjectList = subjectRepository.findBySubjectCode(assignmentfromFront.getSubject().getSubjectCode());
+					if(subjectList.size()>0) {
+						Subject subject = subjectList.get(0);										
+						assignmentFromDB.setSubject(subject);
+						
+						savedAssignment = assignmentRepository.save(assignmentFromDB);
+						status.setCode(Constants.CREATED);
+						res.setStatus(status);
+						return res;
+					} else {
+						status.setCode(Constants.NOTFOUND);
+						res.setStatus(status);
+						//throw exception here
+						//throw 
+					}
+					
+				} else {
+					
+					status.setCode(Constants.NOTFOUND);
+					res.setStatus(status);
+					//throw exception here
+				}
+				
 			} else {
 				status.setCode(Constants.NOTFOUND);
 				res.setStatus(status);
 			}
 			
-			
+
 		}catch(Exception ex) {
 			throw ex;
 		}

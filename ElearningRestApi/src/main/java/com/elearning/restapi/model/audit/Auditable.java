@@ -17,10 +17,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class Auditable {
 	
 	@CreatedBy
-	private String created_by;
+	private String created_by = "kasunSystem";
 	
 	@LastModifiedBy
-    private String lastModifiedBy;
+    private String lastModifiedBy = "kasunSystem";
 	
 	@CreatedDate
 	@Column(nullable = false,updatable = false)

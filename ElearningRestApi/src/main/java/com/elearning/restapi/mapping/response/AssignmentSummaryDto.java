@@ -15,4 +15,6 @@ public class AssignmentSummaryDto {
 	private Integer cutoffMarks;
 	private Integer duration;
 	private String description;
+	private String subjectCode;
+	private String subjectName;
 }

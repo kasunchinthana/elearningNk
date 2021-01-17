@@ -18,6 +18,7 @@ import com.elearning.restapi.mapping.response.AssignmentDto;
 import com.elearning.restapi.mapping.response.RequestWrapper;
 import com.elearning.restapi.mapping.response.ResponsePack;
 import com.elearning.restapi.mapping.response.Status;
+import com.elearning.restapi.mapping.response.StudentAssignmentAnswersDto;
 import com.elearning.restapi.mapping.response.StudentDto;
 import com.elearning.restapi.model.Student;
 import com.elearning.restapi.service.StudentService;
@@ -84,5 +85,41 @@ public class StudentController {
 		}
 
 	}
+	
+	@GetMapping("/students/{studentId}/assignment/{assignmentId}")
+	public ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>> getStudentAssignment(@PathVariable("studentId") Integer studetnId,@PathVariable("assignmentId") Integer assignmentId) {
+		ResponsePack<StudentAssignmentAnswersDto> studentAssignmentAnswersDto = new ResponsePack<>();
+		//ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
+		try {
+			studentAssignmentAnswersDto = studentService.getStudentAssignment(studetnId,assignmentId);
+			if (studentAssignmentAnswersDto != null) {
+				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(studentAssignmentAnswersDto, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	/*
+	 * @PutMapping("/students/{studentId}/assignment/{assignmentId}") public
+	 * ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>
+	 * updateStudentAssignment(@PathVariable("studentId") Integer
+	 * studetnId,@PathVariable("assignmentId") Integer assignmentId,
+	 * 
+	 * @RequestBody RequestWrapper<StudentDto> payload) { ResponsePack<StudentDto>
+	 * updatetStudent = null; try { updatetStudent =
+	 * studentService.updateStudent(id, payload); if (updatetStudent != null) {
+	 * return new ResponseEntity<ResponsePack<StudentDto>>(updatetStudent,
+	 * HttpStatus.CREATED); } else { return new
+	 * ResponseEntity<ResponsePack<StudentDto>>(HttpStatus.FORBIDDEN); } } catch
+	 * (Exception e) { // TODO Auto-generated catch block return new
+	 * ResponseEntity<ResponsePack<StudentDto>>(HttpStatus.INTERNAL_SERVER_ERROR); }
+	 * 
+	 * }
+	 */
+	
 
 }

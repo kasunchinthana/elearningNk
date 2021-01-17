@@ -18,11 +18,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.NaturalIdCache;
 
 import com.elearning.restapi.model.audit.Auditable;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -37,16 +39,32 @@ public class Assignment extends Auditable implements Serializable{
 	private Integer assingnmentId;
 	private String name;
 	private String status;
+	@JsonFormat(pattern = "YYYY-MM-dd")
 	private LocalDateTime devDate;
 	private Integer totalMarks;
 	private Integer cutoffMarks;
 	private Integer duration;
 	private String description;
 	
+	@OneToOne
+	@JsonIgnore
+	@JoinColumn(name="SCL_SUBJECT",referencedColumnName ="subjectId")
+	private Subject subject;
+	
 	@OneToMany(mappedBy = "assignment")
     List<StudentAssignment> studentAssignment;
 		
 	@OneToMany(mappedBy="assignment")
     private List<Question> question;
+	
+	//one Assignment have many StudentAssignmentAnswer
+	@OneToMany(mappedBy = "assignment")
+    List<StudentAssignmentAnswer> studentAssignmentAnswer;
+	
+	@OneToMany(mappedBy = "assignment")
+    List<TeacherAssignmentReview> teacherAssignmentReview;
+	
+	@OneToMany(mappedBy="assignment")
+    private List<TeacherAssignment> teacherAssignment;
 	 
 }
