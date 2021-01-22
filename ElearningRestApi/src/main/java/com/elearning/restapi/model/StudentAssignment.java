@@ -36,7 +36,12 @@ public class StudentAssignment extends Auditable implements Serializable{
 	@JoinColumn(name = "assingnment_id")
 	Assignment assignment;
 	
+	
 	private Integer duration;
+	
+	public StudentAssignment() {
+		
+	}
 	
 	
 	public StudentAssignment(Student student, Assignment assignment) {

@@ -2,6 +2,7 @@ package com.elearning.restapi.mapping.response;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Data;
 
@@ -11,5 +12,7 @@ public class AssignmentDto {
 	AssignmentSummaryDto summary;
 	
 	AssignmentDetailDto detail;
+	
+	List<QuestionDto> questions;
 	
 }

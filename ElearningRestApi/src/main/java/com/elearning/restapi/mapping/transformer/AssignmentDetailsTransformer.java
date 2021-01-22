@@ -1,14 +1,26 @@
 package com.elearning.restapi.mapping.transformer;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elearning.restapi.mapping.response.AssignmentDto;
 import com.elearning.restapi.mapping.response.AssignmentSummaryDto;
+import com.elearning.restapi.mapping.response.QuestionDto;
+import com.elearning.restapi.mapping.response.QuestionSummaryDto;
 import com.elearning.restapi.model.Assignment;
+import com.elearning.restapi.model.Question;
 import com.elearning.restapi.model.Subject;
 
 @Service
 public class AssignmentDetailsTransformer {
+	
+	@Autowired
+	QuestionDetailsTransformer questionDetailsTransformer;
 	
 	public AssignmentDto transform(Assignment assignment) {
 		
@@ -51,6 +63,18 @@ public class AssignmentDetailsTransformer {
 		subject.setSubjectCode(assignmentDto.getSummary().getSubjectCode());
 		subject.setSubjectName(assignmentDto.getSummary().getSubjectName());
 		assignment.setSubject(subject);
+		
+		if(null != assignmentDto.getQuestions()) {
+			List<Question> questionList = new ArrayList<Question>();
+		//Question question = null;
+		for (QuestionDto questionDto : assignmentDto.getQuestions()) {
+			Question  question = questionDetailsTransformer.transformToDao(questionDto);
+			
+			questionList.add(question);			
+		}
+		assignment.setQuestion(questionList);
+		}
+		
 		return assignment;
 		
 	}

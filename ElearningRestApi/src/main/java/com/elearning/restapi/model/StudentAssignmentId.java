@@ -15,6 +15,10 @@ public class StudentAssignmentId implements Serializable{
 	@Column(name = "assingnment_id")
 	private Integer assingnmentId;
 	
+	public StudentAssignmentId(){
+		
+	}
+	
 	public StudentAssignmentId(Integer studentId, Integer assingnmentId) {	
 		this.studentId = studentId;
 		this.assingnmentId = assingnmentId;

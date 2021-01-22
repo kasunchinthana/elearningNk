@@ -18,13 +18,15 @@ public class QuestionDetailsTransformer {
 	public QuestionDto transform(Question question) {
 		
 		QuestionDto questionDto = new QuestionDto();
-		QuestionSummaryDto questionSummaryDto = new QuestionSummaryDto();
-		questionSummaryDto.setQuestionId(question.getQuestionId());
-		questionSummaryDto.setCorrectAnswer(question.getCorrectAnswer());
-		questionSummaryDto.setHint(question.getHint());
-		questionSummaryDto.setQuestion(question.getQuestion());
-		questionSummaryDto.setType(question.getType());
-		questionDto.setSummary(questionSummaryDto);
+		
+		/*
+		 * questionSummaryDto.setQuestionId(question.getQuestionId());
+		 * questionSummaryDto.setCorrectAnswer(question.getCorrectAnswer());
+		 * questionSummaryDto.setHint(question.getHint());
+		 * questionSummaryDto.setQuestion(question.getQuestion());
+		 * questionSummaryDto.setType(question.getType());
+		 */
+		//questionDto.setSummary(questionSummaryDto);
 		return questionDto;
 		
 	}
@@ -32,14 +34,14 @@ public class QuestionDetailsTransformer {
 	public Question transformToDao(QuestionDto questionDto) {
 		
 		Question question = new Question();
-		question.setCorrectAnswer(questionDto.getSummary().getCorrectAnswer());
-		question.setHint(questionDto.getSummary().getHint());
-		question.setQuestion(questionDto.getSummary().getQuestion());
-		question.setQuestionId(questionDto.getSummary().getQuestionId());
-		question.setType(questionDto.getSummary().getType());
-		Assignment assignment = new Assignment();
-		assignment.setAssingnmentId(questionDto.getSummary().getAssingnmentId());
-		question.setAssignment(assignment);
+		question.setCorrectAnswer(questionDto.getCorrectAnswer());
+		question.setHint(questionDto.getHint());
+		question.setQuestion(questionDto.getQuestion());
+		question.setQuestionId(questionDto.getQuestionId());
+		question.setType(questionDto.getType());
+		//Assignment assignment = new Assignment();
+		//assignment.setAssingnmentId(questionDto.getAssingnmentId());
+		//question.setAssignment(assignment);
 		return question;
 	}
 

@@ -53,18 +53,21 @@ public class Assignment extends Auditable implements Serializable{
 	
 	@OneToMany(mappedBy = "assignment")
     List<StudentAssignment> studentAssignment;
+	
+	@OneToMany(mappedBy = "assignment",cascade = CascadeType.ALL)
+	private List<Question> question;
 		
-	@OneToMany(mappedBy="assignment")
-    private List<Question> question;
 	
 	//one Assignment have many StudentAssignmentAnswer
-	@OneToMany(mappedBy = "assignment")
-    List<StudentAssignmentAnswer> studentAssignmentAnswer;
 	
-	@OneToMany(mappedBy = "assignment")
-    List<TeacherAssignmentReview> teacherAssignmentReview;
-	
-	@OneToMany(mappedBy="assignment")
-    private List<TeacherAssignment> teacherAssignment;
+	  @OneToMany(mappedBy = "assignment") List<StudentAssignmentAnswer>
+	  studentAssignmentAnswer;
+	  
+	  @OneToMany(mappedBy = "assignment") List<TeacherAssignmentReview>
+	  teacherAssignmentReview;
+	  
+	  @OneToMany(mappedBy="assignment") private List<TeacherAssignment>
+	  teacherAssignment;
+	 
 	 
 }

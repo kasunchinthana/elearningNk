@@ -19,6 +19,7 @@ import com.elearning.restapi.mapping.response.RequestWrapper;
 import com.elearning.restapi.mapping.response.ResponsePack;
 import com.elearning.restapi.mapping.response.Status;
 import com.elearning.restapi.mapping.response.StudentAssignmentAnswersDto;
+import com.elearning.restapi.mapping.response.StudentAssignmentDto;
 import com.elearning.restapi.mapping.response.StudentDto;
 import com.elearning.restapi.model.Student;
 import com.elearning.restapi.service.StudentService;
@@ -28,15 +29,12 @@ import com.elearning.restapi.utils.Constants;
 @RequestMapping("/elearning-service/v1")
 @CrossOrigin
 public class StudentController {
-	
+
 	@Autowired
 	private StudentService studentService;
-	
-	
-	
+
 	@PostMapping("/students")
-	public ResponseEntity<ResponsePack<StudentDto>> createStudent(
-			@RequestBody RequestWrapper<StudentDto> payload) {
+	public ResponseEntity<ResponsePack<StudentDto>> createStudent(@RequestBody RequestWrapper<StudentDto> payload) {
 		ResponsePack<StudentDto> responseStudentDto = null;
 		try {
 			responseStudentDto = studentService.createStudent(payload);
@@ -50,7 +48,7 @@ public class StudentController {
 			return new ResponseEntity<ResponsePack<StudentDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/students/{id}")
 	public ResponseEntity<ResponsePack<StudentDto>> getStudentById(@PathVariable("id") Integer id) {
 		ResponsePack<StudentDto> studentDto = new ResponsePack<>();
@@ -67,7 +65,7 @@ public class StudentController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping("/students/{id}")
 	public ResponseEntity<ResponsePack<StudentDto>> updateStudent(@PathVariable("id") Integer id,
 			@RequestBody RequestWrapper<StudentDto> payload) {
@@ -85,15 +83,17 @@ public class StudentController {
 		}
 
 	}
-	
+
 	@GetMapping("/students/{studentId}/assignment/{assignmentId}")
-	public ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>> getStudentAssignment(@PathVariable("studentId") Integer studetnId,@PathVariable("assignmentId") Integer assignmentId) {
+	public ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>> getStudentAssignment(
+			@PathVariable("studentId") Integer studetnId, @PathVariable("assignmentId") Integer assignmentId) {
 		ResponsePack<StudentAssignmentAnswersDto> studentAssignmentAnswersDto = new ResponsePack<>();
-		//ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
+		// ResponsePack<AssignmentDto> assignmentDtoLlist = new ResponsePack<>();
 		try {
-			studentAssignmentAnswersDto = studentService.getStudentAssignment(studetnId,assignmentId);
+			studentAssignmentAnswersDto = studentService.getStudentAssignment(studetnId, assignmentId);
 			if (studentAssignmentAnswersDto != null) {
-				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(studentAssignmentAnswersDto, HttpStatus.ACCEPTED);
+				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(studentAssignmentAnswersDto,
+						HttpStatus.ACCEPTED);
 			} else {
 				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.NO_CONTENT);
 			}
@@ -102,24 +102,38 @@ public class StudentController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	/*
-	 * @PutMapping("/students/{studentId}/assignment/{assignmentId}") public
-	 * ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>
-	 * updateStudentAssignment(@PathVariable("studentId") Integer
-	 * studetnId,@PathVariable("assignmentId") Integer assignmentId,
-	 * 
-	 * @RequestBody RequestWrapper<StudentDto> payload) { ResponsePack<StudentDto>
-	 * updatetStudent = null; try { updatetStudent =
-	 * studentService.updateStudent(id, payload); if (updatetStudent != null) {
-	 * return new ResponseEntity<ResponsePack<StudentDto>>(updatetStudent,
-	 * HttpStatus.CREATED); } else { return new
-	 * ResponseEntity<ResponsePack<StudentDto>>(HttpStatus.FORBIDDEN); } } catch
-	 * (Exception e) { // TODO Auto-generated catch block return new
-	 * ResponseEntity<ResponsePack<StudentDto>>(HttpStatus.INTERNAL_SERVER_ERROR); }
-	 * 
-	 * }
-	 */
-	
 
+	@PutMapping("/students/{studentId}/assignment/{assignmentId}")
+	public ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>> updateStudentAssignment(
+			@PathVariable("studentId") Integer studentId,@PathVariable("assignmentId") Integer assignmentId,@RequestBody RequestWrapper<StudentDto> payload) { 
+		ResponsePack<StudentAssignmentAnswersDto> updatetStudentAssignmentAnswers = null; 
+		try {  
+			updatetStudentAssignmentAnswers = studentService.updateStudentAssignmentAnswers(studentId,assignmentId, payload); 
+		if (updatetStudentAssignmentAnswers != null) {
+			return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(updatetStudentAssignmentAnswers,HttpStatus.CREATED); 
+		} else {
+			return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.FORBIDDEN); 
+		  } 
+		} catch (Exception e) { // TODO Auto-generated catch block return new
+			return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.INTERNAL_SERVER_ERROR); 
+	  }
+	  
+	  }
+
+	@PostMapping("/students/{studentId}/assignment/{assignmentId}")
+	public ResponseEntity<ResponsePack<StudentAssignmentDto>> createStudentAssignment(@PathVariable("studentId") Integer studentId,@PathVariable("assignmentId") Integer assignmentId,
+			@RequestBody RequestWrapper<StudentAssignmentDto> payload) {
+		ResponsePack<StudentAssignmentDto> responseStudentAssignmentDto = null;
+		try {
+			responseStudentAssignmentDto = studentService.createStudentAssignment(studentId,assignmentId,payload);
+			if (responseStudentAssignmentDto != null) {
+				return new ResponseEntity<ResponsePack<StudentAssignmentDto>>(responseStudentAssignmentDto, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<ResponsePack<StudentAssignmentDto>>(HttpStatus.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<ResponsePack<StudentAssignmentDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

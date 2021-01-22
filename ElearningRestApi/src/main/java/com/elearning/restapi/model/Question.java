@@ -3,6 +3,7 @@ package com.elearning.restapi.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.elearning.restapi.model.audit.Auditable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -29,15 +31,21 @@ public class Question extends Auditable implements Serializable {
 	private String correctAnswer;
 	private String hint;
 
-	@ManyToOne
-	@JoinColumn(name = "assingnment_id", nullable = false)
-	private Assignment assignment;
-
-	// one Question have many StudentAssignmentAnswer
-	@OneToMany(mappedBy = "question")
-	List<StudentAssignmentAnswer> studentAssignmentAnswer;
 	
-	@OneToMany(mappedBy = "question")
-    List<TeacherAssignmentReview> teacherAssignmentReview;
+	  @ManyToOne(cascade = CascadeType.ALL)
+	  @JoinColumn(name="assingnment_id" ) 
+	  private Assignment assignment;
+	 
 
+	 
+	
+	/*
+	 * // one Question have many StudentAssignmentAnswer
+	 * 
+	 * @OneToMany(mappedBy = "question") List<StudentAssignmentAnswer>
+	 * studentAssignmentAnswer;
+	 * 
+	 * @OneToMany(mappedBy = "question") List<TeacherAssignmentReview>
+	 * teacherAssignmentReview;
+	 */
 }

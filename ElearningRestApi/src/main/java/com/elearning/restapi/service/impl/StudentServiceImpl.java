@@ -7,16 +7,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.elearning.restapi.dao.AssignmentRepository;
+import com.elearning.restapi.dao.StudentAssignmentAnswerRepository;
+import com.elearning.restapi.dao.StudentAssignmentRepository;
 import com.elearning.restapi.dao.StudentRepository;
 import com.elearning.restapi.mapping.response.AssignmentDto;
 import com.elearning.restapi.mapping.response.RequestWrapper;
 import com.elearning.restapi.mapping.response.ResponsePack;
 import com.elearning.restapi.mapping.response.Status;
 import com.elearning.restapi.mapping.response.StudentAssignmentAnswersDto;
+import com.elearning.restapi.mapping.response.StudentAssignmentDto;
 import com.elearning.restapi.mapping.response.StudentDto;
+import com.elearning.restapi.mapping.transformer.StudentAssignmentTransformer;
 import com.elearning.restapi.mapping.transformer.StudentDetailsTransformer;
 import com.elearning.restapi.model.Assignment;
 import com.elearning.restapi.model.Student;
+import com.elearning.restapi.model.StudentAssignment;
 import com.elearning.restapi.service.StudentService;
 import com.elearning.restapi.utils.Constants;
 
@@ -28,6 +34,18 @@ public class StudentServiceImpl implements StudentService {
 	
 	@Autowired
 	private StudentDetailsTransformer studentDetailsTransformer;
+	
+	@Autowired
+	private StudentAssignmentAnswerRepository studentAssignmentAnswerRepository;
+	
+	@Autowired
+	private StudentAssignmentRepository studentAssignmentRepository;
+	
+	@Autowired
+	private StudentAssignmentTransformer studentAssignmentTransformer;
+	
+	@Autowired
+	private AssignmentRepository assignmentRepository;
 	
 	
 	@Override
@@ -135,6 +153,59 @@ public class StudentServiceImpl implements StudentService {
 			 * assignmentDtoList.add(assignmentDto); } res.setData(assignmentDtoList);
 			 */
 		return res;
+		}catch(Exception ex) {
+			throw ex;
+		}
+	}
+
+
+	@Override
+	public ResponsePack<StudentAssignmentAnswersDto> updateStudentAssignmentAnswers(Integer studentId,
+			Integer assignmentId, RequestWrapper<StudentDto> payload) {
+		ResponsePack<StudentAssignmentAnswersDto> res = new ResponsePack<StudentAssignmentAnswersDto>();
+		
+		//sAAres= studentAssignmentAnswerRepository.save(entity)
+		return null;
+	}
+
+
+	@Override
+	public ResponsePack<StudentAssignmentDto> createStudentAssignment(Integer studentId,Integer assignmentId,RequestWrapper<StudentAssignmentDto> studentAssignment) {
+		ResponsePack<StudentAssignmentDto> res = new ResponsePack<StudentAssignmentDto>();
+		Status status = new Status();
+		StudentAssignment savedStudentAssignment = null;
+		try {
+			if (studentAssignment.getPayload() != null){
+				
+				Student studentFromDB= null;
+				Optional<Student> student = studentRepository.findById(studentId);
+				if (student.isPresent()) {
+					studentFromDB = student.get();
+				} else {
+					studentFromDB = null;
+				}
+				
+				Assignment assignmentFromDB= null;
+				Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
+				if (assignment.isPresent()) {
+					assignmentFromDB = assignment.get();
+				}
+				StudentAssignment studentAssignment2 = studentAssignmentTransformer.transformToDao(studentFromDB,assignmentFromDB,studentAssignment.getPayload());	
+				savedStudentAssignment = studentAssignmentRepository.save(studentAssignment2);
+			} else {
+				status.setCode(Constants.NOTFOUND);
+				res.setStatus(status);
+			}
+			
+			if (savedStudentAssignment.getId() != null) {
+				status.setCode(Constants.CREATED);
+				res.setStatus(status);
+				return res;
+			}else {
+				status.setCode(Constants.ERROR);
+				res.setStatus(status);
+				return res;
+			}
 		}catch(Exception ex) {
 			throw ex;
 		}
