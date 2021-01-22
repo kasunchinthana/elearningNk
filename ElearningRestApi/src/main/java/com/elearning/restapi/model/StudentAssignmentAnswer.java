@@ -1,7 +1,9 @@
 package com.elearning.restapi.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 
 import com.elearning.restapi.model.audit.Auditable;
 
@@ -28,19 +31,21 @@ public class StudentAssignmentAnswer extends Auditable implements Serializable {
 	private String answer;
 
 	// many StudentAssignmentAnswer for one student
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("studentId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_id")
 	Student student;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("assingnmentId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "assingnment_id")
 	Assignment assignment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("questionId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")
 	Question question;
 
 }
+/*
+  @ManyToOne(cascade = CascadeType.ALL)
+	  @JoinColumn(name="assingnment_id" ) 
+	  private Assignment assignment;
+ */

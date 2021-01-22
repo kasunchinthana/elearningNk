@@ -136,4 +136,22 @@ public class StudentController {
 			return new ResponseEntity<ResponsePack<StudentAssignmentDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("/students/{studentId}/assignment/{assignmentId}/answer")
+	public ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>> createStudentAssignmentAnswer(@PathVariable("studentId") Integer studentId,
+			@PathVariable("assignmentId") Integer assignmentId,
+			@RequestBody RequestWrapper<StudentAssignmentAnswersDto> payload) {
+		ResponsePack<StudentAssignmentAnswersDto> responseStudentAssignmentAnswersDto = null;
+		try {
+			responseStudentAssignmentAnswersDto = studentService.createStudentAssignmentAnswer(studentId,assignmentId,payload);
+			if (responseStudentAssignmentAnswersDto != null) {
+				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(responseStudentAssignmentAnswersDto, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<ResponsePack<StudentAssignmentAnswersDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

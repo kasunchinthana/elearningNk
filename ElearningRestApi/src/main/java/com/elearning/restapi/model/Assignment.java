@@ -52,7 +52,7 @@ public class Assignment extends Auditable implements Serializable{
 	private Subject subject;
 	
 	@OneToMany(mappedBy = "assignment")
-    List<StudentAssignment> studentAssignment;
+	private List<StudentAssignment> studentAssignment;
 	
 	@OneToMany(mappedBy = "assignment",cascade = CascadeType.ALL)
 	private List<Question> question;
@@ -60,14 +60,14 @@ public class Assignment extends Auditable implements Serializable{
 	
 	//one Assignment have many StudentAssignmentAnswer
 	
-	  @OneToMany(mappedBy = "assignment") List<StudentAssignmentAnswer>
-	  studentAssignmentAnswer;
+	  @OneToMany(mappedBy = "assignment") 
+	  private List<StudentAssignmentAnswer> studentAssignmentAnswer;
 	  
-	  @OneToMany(mappedBy = "assignment") List<TeacherAssignmentReview>
-	  teacherAssignmentReview;
+	  @OneToMany(mappedBy = "assignment") 
+	  private List<TeacherAssignmentReview> teacherAssignmentReview;
 	  
-	  @OneToMany(mappedBy="assignment") private List<TeacherAssignment>
-	  teacherAssignment;
+	  @OneToMany(mappedBy="assignment") 
+	  private List<TeacherAssignment> teacherAssignment;
 	 
 	 
 }

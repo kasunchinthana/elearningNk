@@ -23,4 +23,8 @@ public interface StudentService {
 		RequestWrapper<StudentDto> payload);
 
   ResponsePack<StudentAssignmentDto> createStudentAssignment(Integer studentId, Integer assignmentId,RequestWrapper<StudentAssignmentDto> payload);
+
+  ResponsePack<StudentAssignmentAnswersDto> createStudentAssignmentAnswer(Integer studentId, Integer assignmentId,
+		RequestWrapper<StudentAssignmentAnswersDto> payload);
+
 }
