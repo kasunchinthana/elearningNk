@@ -21,7 +21,10 @@ import com.elearning.restapi.mapping.response.QuestionDto;
 import com.elearning.restapi.mapping.response.RequestWrapper;
 import com.elearning.restapi.mapping.response.ResponsePack;
 import com.elearning.restapi.mapping.response.Status;
+import com.elearning.restapi.mapping.response.StudentAssignmentAnswersDto;
 import com.elearning.restapi.mapping.response.StudentDto;
+import com.elearning.restapi.mapping.response.TeacherAssignmentReviewDto;
+import com.elearning.restapi.mapping.response.TeacherDto;
 import com.elearning.restapi.model.Student;
 import com.elearning.restapi.service.AssignmentService;
 import com.elearning.restapi.service.QuestionService;
@@ -31,28 +34,47 @@ import com.elearning.restapi.utils.Constants;
 
 @RestController
 @RequestMapping("/elearning-service/v1")
-@CrossOrigin
 public class TeacherController {
 
-	/*
-	 * @Autowired private TeacherService teacherService;
-	 * 
-	 * 
-	 * 
-	 * @PostMapping("/teacher/student/{studentId}/assignment/{assignmentId}/review")
-	 * public ResponseEntity<ResponsePack<QuestionDto>>
-	 * createQuestion(@PathVariable("studentId") Integer
-	 * studentId,@PathVariable("assignmentId") Integer assignmentId,
-	 * 
-	 * @RequestBody RequestWrapper<QuestionDto> payload) { ResponsePack<QuestionDto>
-	 * responseQuestioDto = null; try { responseQuestioDto =
-	 * teacherService.createQuestion(payload); if (responseQuestioDto != null) {
-	 * return new ResponseEntity<ResponsePack<QuestionDto>>(responseQuestioDto,
-	 * HttpStatus.CREATED); } else { return new
-	 * ResponseEntity<ResponsePack<QuestionDto>>(HttpStatus.FORBIDDEN); } } catch
-	 * (Exception e) { // TODO Auto-generated catch block return new
-	 * ResponseEntity<ResponsePack<QuestionDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
-	 * } }
-	 */
+	
+	  @Autowired 
+	  private TeacherService teacherService;
+	  
+	  @PostMapping("/teacher")
+		public ResponseEntity<ResponsePack<TeacherDto>> createTeacher(@RequestBody RequestWrapper<TeacherDto> payload) {
+			ResponsePack<TeacherDto> responseTeacherDto = null;
+			try {
+				responseTeacherDto = teacherService.createTeacher(payload);
+				if (responseTeacherDto != null) {
+					return new ResponseEntity<ResponsePack<TeacherDto>>(responseTeacherDto, HttpStatus.CREATED);
+				} else {
+					return new ResponseEntity<ResponsePack<TeacherDto>>(HttpStatus.FORBIDDEN);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return new ResponseEntity<ResponsePack<TeacherDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	    
+	  @PostMapping("/teacher/{teacherId}/student/{studentId}/assignment/{assignmentId}/questionId/{questionId}/review")
+	  public ResponseEntity<ResponsePack<TeacherAssignmentReviewDto>> createAssignmrntReview(@PathVariable("teacherId") Integer teacherId,
+			  @PathVariable("studentId") Integer studentId,
+			  @PathVariable("assignmentId") Integer assignmentId,
+			  @PathVariable("questionId") Integer questionId,
+			  @RequestBody RequestWrapper<TeacherAssignmentReviewDto> payload)
+	  { 
+		  ResponsePack<TeacherAssignmentReviewDto> teacherAssignmentReviewDto = null; 
+	  try { 
+		  teacherAssignmentReviewDto = teacherService.createAssignmrntReview(teacherId,studentId,assignmentId,questionId, payload);	  
+		  if (teacherAssignmentReviewDto != null) {
+			  return new ResponseEntity<ResponsePack<TeacherAssignmentReviewDto>>(teacherAssignmentReviewDto, HttpStatus.CREATED); 
+		  } else {
+			  return new ResponseEntity<ResponsePack<TeacherAssignmentReviewDto>>(HttpStatus.FORBIDDEN); 
+			  } 
+		  } catch (Exception e) { // TODO Auto-generated catch block return new
+			  return new ResponseEntity<ResponsePack<TeacherAssignmentReviewDto>> (HttpStatus.INTERNAL_SERVER_ERROR);
+		  } 
+	  }
+	 
 
 }

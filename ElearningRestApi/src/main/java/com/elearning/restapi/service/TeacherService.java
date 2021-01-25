@@ -7,18 +7,17 @@ import com.elearning.restapi.mapping.response.Payload;
 import com.elearning.restapi.mapping.response.QuestionDto;
 import com.elearning.restapi.mapping.response.RequestWrapper;
 import com.elearning.restapi.mapping.response.ResponsePack;
+import com.elearning.restapi.mapping.response.TeacherAssignmentReviewDto;
+import com.elearning.restapi.mapping.response.TeacherDto;
 
 
 public interface TeacherService {
   
 
-  ResponsePack<QuestionDto> createQuestion(RequestWrapper<QuestionDto> payload) throws Exception;
 
-	/*
-	 * ResponsePack<QuestionDto> deleteQuestionById(Integer id) throws Exception;
-	 * 
-	 * ResponsePack<QuestionDto> updateQuestion(Integer id,
-	 * RequestWrapper<QuestionDto> questionDto) throws Exception;
-	 */
+  ResponsePack<TeacherAssignmentReviewDto> createAssignmrntReview(Integer teacherId,Integer studentId, Integer assignmentId, Integer questionId,
+		RequestWrapper<TeacherAssignmentReviewDto> payload);
+
+  ResponsePack<TeacherDto> createTeacher(RequestWrapper<TeacherDto> payload);
       
 }

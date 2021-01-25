@@ -2,6 +2,7 @@ package com.elearning.restapi.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,25 +25,21 @@ public class TeacherAssignmentReview extends Auditable implements Serializable {
 	private Integer id;
 	private String review;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("id")
-	@JoinColumn(name = "id")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@JoinColumn(name = "teacher_id")
 	Teacher teacher;
 
 	// teachers can review student answers
 	// many StudentAssignmentAnswer for one student
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("studentId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_id")
 	Student student;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("assingnmentId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "assingnment_id")
 	Assignment assignment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("questionId")
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")
 	Question question;
 

@@ -25,9 +25,6 @@ public class StudentAssignmentAnswer extends Auditable implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	// private Integer studentId;
-	// private Integer assignmentId;
-	// private Integer questionId;
 	private String answer;
 
 	// many StudentAssignmentAnswer for one student
