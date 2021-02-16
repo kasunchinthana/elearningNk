@@ -17,4 +17,5 @@ public class AssignmentSummaryDto {
 	private String description;
 	private String subjectCode;
 	private String subjectName;
+	private Integer teacherId;
 }

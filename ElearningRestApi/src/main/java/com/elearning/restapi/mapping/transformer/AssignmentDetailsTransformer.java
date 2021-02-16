@@ -74,7 +74,9 @@ public class AssignmentDetailsTransformer {
 		}
 		assignment.setQuestion(questionList);
 		}
-		
+		if(null != assignmentDto.getSummary().getTeacherId()) {
+			List<Question> questionList = new ArrayList<Question>();
+		}
 		return assignment;
 		
 	}

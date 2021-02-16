@@ -75,6 +75,19 @@ public class TeacherController {
 			  return new ResponseEntity<ResponsePack<TeacherAssignmentReviewDto>> (HttpStatus.INTERNAL_SERVER_ERROR);
 		  } 
 	  }
-	 
+	  
+	/*
+	 * @PostMapping("/teacher/{teacherId}/assignment/{assignmentId}") public
+	 * ResponseEntity<ResponsePack<TeacherDto>> createTeacher(@RequestBody
+	 * RequestWrapper<TeacherDto> payload) { ResponsePack<TeacherDto>
+	 * responseTeacherDto = null; try { responseTeacherDto =
+	 * teacherService.createTeacher(payload); if (responseTeacherDto != null) {
+	 * return new ResponseEntity<ResponsePack<TeacherDto>>(responseTeacherDto,
+	 * HttpStatus.CREATED); } else { return new
+	 * ResponseEntity<ResponsePack<TeacherDto>>(HttpStatus.FORBIDDEN); } } catch
+	 * (Exception e) { // TODO Auto-generated catch block return new
+	 * ResponseEntity<ResponsePack<TeacherDto>>(HttpStatus.INTERNAL_SERVER_ERROR); }
+	 * }
+	 */
 
 }

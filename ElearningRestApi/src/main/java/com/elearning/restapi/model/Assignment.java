@@ -46,6 +46,7 @@ public class Assignment extends Auditable implements Serializable{
 	private Integer duration;
 	private String description;
 	
+	
 	@OneToOne
 	@JsonIgnore
 	@JoinColumn(name="SCL_SUBJECT",referencedColumnName ="subjectId")
@@ -66,8 +67,12 @@ public class Assignment extends Auditable implements Serializable{
 	  @OneToMany(mappedBy = "assignment") 
 	  private List<TeacherAssignmentReview> teacherAssignmentReview;
 	  
-	  @OneToMany(mappedBy="assignment") 
-	  private List<TeacherAssignment> teacherAssignment;
-	 
+	/*
+	 * @OneToMany(mappedBy="assignment") private List<TeacherAssignment>
+	 * teacherAssignment;
+	 */
+	  @ManyToOne(cascade = CascadeType.ALL)
+	  @JoinColumn(name="teacher_id" ) 
+	  private Teacher teacher;
 	 
 }
